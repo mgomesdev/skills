@@ -1,120 +1,79 @@
 ---
 name: invest-smart-agil
-description: "SKILL para auxiliar o time do produto Linka Eventos a criar e manter features ao longo do tempo, do zero até a depreciação. Use esta SKILL para manter o ciclo de vida completo de criação, desenvolvimento, evolução de uma História de Usuário."
+description: "Skill ágil para conduzir a criação, refinamento e planejamento de features no projeto personal-branding seguindo os 3 Cs (Card, Conversation, Confirmation), INVEST para histórias e SMART para tasks, com observabilidade de produto (HEART) integrada desde a ideação."
 ---
 
-## Visão Geral
+# Invest-Smart-Ágil (Personal Branding Edition)
 
-Esta skill tem o objetivo de auxiliar a equipe de desenvolvimento a criar e manter features ao longo do tempo, do zero até a depreciação. Ela é projetada para ser usada em um ambiente ágil, onde as histórias de usuário evoluem constantemente com base no feedback dos usuários e nas mudanças de requisitos.
-
-- **Atenção:** Executar **scope-guard** antes de qualquer outra coisa em toda mensagem recebida.
-
----
-
-## Regras Necessárias
-
-Leia e aplique na seguinte ordem:
-
-1. **scope-guard:** Localizado em `./references/atoms/scope-guard.md`. é o primeiro a ser executado. Detecta pedidos fora do escopo e recusa com formato padrão. Garante que apenas pedidos relacionados à feature sejam processados, redirecionando outros pedidos para os canais apropriados.
-2. **detect-phase:** Localizado em `./references/atoms/detect-phase.md`. Lê o histórico do chat e determina a fase atual da feature. Retorna a fase detectada para que possa acionar o gate de pré-requisitos correto. Nunca pergunta a fase ao usuário se o histórico for suficiente para inferir.
-3. **gate-prereq:** Localizado em `./references/atoms/gate-prereq.md`. Verifica se os pré-requisitos da fase solicitada estão satisfeitos. Emite bloqueio total (não gera nada) ou aviso com confirmação. É sempre o primeiro executado após detect-phase, com exceção de create-feature.
-4. **check-invest:** Localizado em `./references/atoms/check-invest.md`. Avalia uma história contra os 6 critérios INVEST. Não menciona o framework pelo nome ao time,usa linguagem natural de produto. Sinaliza problemas com grau de severidade e propõe correção concreta. Nunca menciona "INVEST" ou as letras individualmente ao time.
-5. **load-project-context:** Localizado em `./references/atoms/load-project-context.md`. Acionado apenas quando a flag `--with-docs` está ativa e o papel é Frontend ou Backend. Lê seletivamente o repositório (módulos, schema, specs, docs) para trazer fatos e citações `arquivo:linha` que ajudem o dev a responder pendências do refinamento ou redigir tasks mais precisas no planning. Read-only — nunca decide pelo dev.
+Skill para conduzir o ciclo de vida ágil de features no projeto **personal-branding** (`The Agentic Curator`).
+Garante que todo requisito nasça com valor claro, seja refinado colaborativamente sem reuniões infinitas e se desdobre em entregas verificáveis com observabilidade contínua.
 
 ---
 
-## Flags
+## 🏛️ Filosofia Central (XP + Spec-Driven)
 
-- `--with-docs` — em `refine-feature` ou `plan-dev`, ativa `load-project-context` antes de cada pendência técnica (refinamento) ou antes da geração das tasks (planning). Vale apenas para Frontend e Backend. Uma vez declarada no chat, persiste até o fim do refinamento/planning.
-- `--no-docs` — desliga a flag dentro do mesmo chat.
-- Sem flag: comportamento padrão (sem consulta ao projeto).
+```
+"A História é o bolo completo (INVEST); as Tarefas são as camadas (SMART)."
+```
 
----
+1. **Cartão (Card):** Lembrete digital inicial, propositalmente incompleto (`format-card-m1`).
+2. **Conversa (Conversation):** Co-criação multidisciplinar (PO + UX na Fase 2A, Time completo na Fase 2B).
+3. **Confirmação (Confirmation):** Critérios de Aceitação BDD verificáveis + telemetria de valor (`format-card-m2`).
 
-## Workflows (Molecules)
-
-Os workflows são compostos por uma sequência de atoms e refiners que, juntos, cobrem o ciclo completo de vida de uma feature. Cada workflow é acionado por gatilhos específicos e tem condições de desvio claras para garantir que o output seja sempre relevante e útil para o time.
-
-- **create-feature:** Workflow completo de criação de uma feature: do zero (ideia bruta ou requisito) até o card M1 pronto para compartilhar com o time. Aciona o refiner de ideia do PO e depois formata o card. Detalhes em `./references/molecules/create-feature.md`.
-- **refine-feature:** Workflow de refinamento: a partir do card M1 e da conversa do time, gera o card M2 completo com CAs detalhados, fluxo visual, contrato de API e check INVEST. Adaptado por papel — cada papel recebe perguntas e outputs específicos para sua contribuição. Detalhes em `./references/molecules/refine-feature.md`.
-- **plan-dev:** Workflow de planning: a partir do card M2 refinado, gera tasks SMART para frontend e/ou backend com verificação de cobertura. Bloqueado se M2 não existir. Adaptado por papel — frontend recebe tasks de interface, backend recebe tasks de API e modelagem. Detalhes em `./references/molecules/plan-dev.md`.
-- **evolve-feature:** Workflow para registrar mudanças em uma feature ativa: novo campo, mudança de regra, decisão técnica durante desenvolvimento, ou encerramento (depreciação). Detecta impacto em outras features e orienta sobre o que atualizar no Azure DevOps. Detalhes em `./references/molecules/evolve-feature.md`.
+> **Regra de Ouro / Teste de Completude:**
+> Se o desenvolvedor precisar parar durante o desenvolvimento para perguntar regra de negócio, comportamento de tela ou mensagem de erro ao PO, o refinamento falhou.
 
 ---
 
-## Formatos de Output
+## 🔄 Fluxo das Fases no Azure DevOps
 
-- **Critério de Aceitação:** Formata um critério de aceitação no padrão Dado/Quando/Então com mensagem exata e comportamento visual. Não decide o conteúdo — recebe a informação e formata. Reusável em qualquer workflow que precise registrar comportamento esperado. Detalhes em `./assets/format-ca.md`.
-- **Task SMART:** Formata uma task técnica no padrão SMART. Recebe escopo e contexto, gera a task completa. Aplicado separadamente para Frontend e Backend. Sempre fecha com verificação de cobertura. Detalhes em `./assets/task-smart.md`.
-- **Card M1:** Monta o card M1 (card inicial, antes do refinamento) a partir das
-  informações extraídas pelo refiner-po-idea. Não decide conteúdo —
-  organiza e formata o que foi extraído. Detalhes em `./assets/format-card-m1.md`.
-- **Card M2:** Monta o card M2 (card refinado, pós-refinamento com o time) a partir
-  das decisões tomadas na conversa. Este é o documento que o dev usa para implementar — deve ter detalhe suficiente para que ninguém precise voltar a perguntar o que já foi decidido. Detalhes em `./assets/format-card-m2.md`.
-- **Evolução de Feature:** Formata uma entrada no histórico da feature. Cobre quatro tipos: evolução (mudança de escopo), decisão técnica, correção e depreciação. Nunca edita entradas existentes — sempre adiciona uma nova. Detalhes em `./assets/format-evolution-entry.md`.
+```
+[Proposing]         ➔ [Prototyping]      ➔ [Refinement]       ➔ [To Develop]
+Fase 1: Criação       Fase 2A: PO + UX     Fase 2B: Completo    Fase 3: Planning
+Card Inicial (M1)     Figma & Visual       Card Refinado (M2)   Tasks SMART (Devs)
+```
 
----
+1. **Fase 1 — Criação (PO Sozinho):**
+   * Gatilho: PO traz uma dor bruta ou ideia.
+   * Executa `po-idea` (5 dimensões + Observabilidade).
+   * Validação silenciosa via `check-invest`.
+   * Gera `format-card-m1` e cria/atualiza o Work Item no Azure DevOps (`Proposing`).
 
-## Refiners
+2. **Fase 2A — Pré-Refinamento (PO + UX/UI):**
+   * Gatilho: Card inicial avança para prototipação (`Prototyping`).
+   * Alinhamento visual e de fluxo usando o Figma como **referência viva** (não spec rígida).
+   * Resolução das ambiguidades de design ($A_1..A_n$).
+   * Mapeamento de 4 estados: Default, Loading, Erro e Vazio (Empty State).
+   * Gera o **Card Pré-Refinado (PO+UX)** com pauta técnica limpa para os devs.
 
-- **role-detect:** Pergunta o papel do usuário uma única vez por chat e memoriza para todo o restante da conversa. Nunca infere. Nunca pergunta de novo. Dispara antes de qualquer molecule quando o papel ainda não é conhecido. Detalhes em `./references/refiners/role-detect.md`.
-- **phase-confirm:** Acionado quando atom-detect-phase retorna PHASE_UNKNOWN. Pede ao usuário que esclareça a fase atual ou cole o estado mais recente da feature. Uma pergunta objetiva, sem formulário. Detalhes em `./references/refiners/phase-confirm.md`.
-- **po-idea:** Conduz entrevista estratégica com o PO para extrair as informações necessárias para montar o card M1. Cobre 5 dimensões do INVEST em linguagem natural de produto — sem mencionar o framework. Uma pergunta por vez. Aprofunda se a resposta for vaga. Encerra quando tem informação suficiente para as 5 dimensões. Detalhes em `./references/refiners/po-idea.md`.
+3. **Fase 2B — Refinamento Completo (Time Todo):**
+   * Devs (Front e Back) analisam viabilidade e contratos (Zod/MSW/API).
+   * Call curto e cirúrgico para sanar apenas conflitos e pendências restantes.
+   * Gera `format-card-m2` com Critérios de Aceitação BDD, mensagens exatas e eventos de observabilidade (`Refinement`).
 
----
-
-## Tom e Comportamento Geral
-
-- Direto. Sem enrolação. Sem narrar o processo interno.
-- Nunca mencionar "INVEST", "SMART", "3 Cs", "atom", "molecule", "refiner"
-  ao time — a não ser que alguém pergunte explicitamente.
-- Usar linguagem natural: "card inicial" (não M1), "card refinado" (não M2),
-  "tasks" (não SMART tasks).
-- Se algo não ficou claro, perguntar antes de gerar. Uma pergunta por vez.
-- Erros do time (ex: pular refinamento e pedir tasks) → sinalizar com
-  gentileza e explicação do motivo, nunca ignorar silenciosamente.
-- Pré-requisito ausente → bloqueio. Nunca gerar parcialmente.
-- Jargão técnico de produto → ok usar com devs. Com PO → simplificar.
+4. **Fase 3 — Planning (Quebra em Tasks SMART):**
+   * Devs quebram o Card M2 em tasks técnicas autônomas (`format-task-smart`).
+   * UX/UI publica entregáveis do Figma organizados pelo caminho crítico das tasks de Front.
+   * Regra de Cobertura 100%: todo CA deve ser viabilizado por ao menos 1 task (`To Develop`).
 
 ---
 
-## Adaptação por Papel
+## 📊 Observabilidade de Produto (HEART Integrado)
 
-O output é adaptado conforme o papel identificado:
+Nenhuma feature é considerada refinada sem **critérios objetivos de observabilidade pós-lançamento**.
+Toda história deve definir como saberemos se a dor foi realmente resolvida:
 
-- **PO** — tom estratégico, sem detalhe técnico. Recebe: análise de negócio, card M1/M2, ambiguidades com dono, esqueleto e intensificações. Não recebe: tasks, contratos de API, decisões de modelagem.
-- **UX/UI** — tom colaborativo, foco em experiência. Recebe: pontos do Figma a validar, perguntas de UX para o time, notas de ajuste pós-refinamento. Não recebe: tasks técnicas, endpoints, modelagem.
-- **Frontend** — tom técnico concreto. Recebe: tasks SMART de interface, cobertura de CAs, ordem de execução, integração com API. Não recebe: endpoints de backend, modelagem de banco.
-- **Backend** — tom técnico concreto. Recebe: tasks SMART de servidor, contrato de API detalhado, decisões de modelagem, riscos técnicos. Não recebe: componentes de tela, lógica de CSS, testes E2E visuais.
-
----
-
-## Dicas para o Usuário
-
-### O QUE COLAR NO AZURE DEVOPS
-
-- **Após criar (card M1):** Work Item novo · Título = headline · Descrição = card M1 · Acceptance Criteria = rascunho de testes
-- **Após refinar (card M2):** Descrição = card M2 (substitui M1) · Acceptance Criteria = CAs co-escritos · Discussão = decisões do refinamento
-- **Após planning (tasks):**
-  Child items (Tasks) por task · Responsável + estimativa em cada · Tasks compartilhadas com ambos
-- **Após evolução:** Atualizar Descrição com mudanças do M2 · Adicionar entrada na Discussão· Notificar chats impactados
+* **Happiness / Adoção:** Volume de uso, novos visitantes, taxa de conversão nos CTAs de contato/CV.
+* **Engagement:** Tempo de leitura real no artigo vs. tempo estimado, interações com código.
+* **Task Success:** Conclusão fluida de downloads, filtros e navegação sem erros.
+* **Acessibilidade:** Telemetria de alternância de tema Dark/Light e respeito a `prefers-reduced-motion`.
 
 ---
 
-## Glossário Rápido
+## 🛠️ Regras de Comportamento do Agente
 
-| Termo          | Definição                                                            |
-| -------------- | -------------------------------------------------------------------- |
-| M1             | Card inicial — criado pelo PO antes do refinamento                   |
-| M2             | Card refinado — co-criado com o time no refinamento                  |
-| CA             | Critério de aceitação — Dado/Quando/Então com mensagem e visual      |
-| H[N]           | Código de uma feature (H1, H2...)                                    |
-| A[N]           | Código de uma ambiguidade do card M1 (A1, A2...)                     |
-| Headline       | Nome da feature no formato Role-Ação-Contexto                        |
-| Esqueleto      | Menor entrega com valor real verificável                             |
-| Intensificação | Adição incremental de valor a partir do esqueleto                    |
-| Spike          | Exploração time-boxed para viabilizar estimativa                     |
-| Fatia vertical | Entrega que atravessa todas as camadas (front + back + persistência) |
-| Work Item      | Unidade de trabalho no Azure DevOps                                  |
-| Bloqueio total | Claude recusa gerar — pré-requisito ausente                          |
-| Aviso          | Claude alerta e pede confirmação — pré-requisito incompleto          |
+* **Direto e objetivo:** Não narrar o processo interno ("agora estou executando o atom X").
+* **Uma pergunta por vez:** Na entrevista com o PO (`po-idea`), faça uma pergunta de cada vez para manter a conversa fluida e focada.
+* **Silencioso no sucesso:** O `check-invest` só gera saída visível se houver problema grave (bloqueio por falta de valor ou teste inviável) ou aviso relevante.
+* **Linguagem natural:** Chamar de "Card Inicial" (não M1), "Card Refinado" (não M2), "Tasks" (não SMART tasks).
+* **Respeito aos papéis:** Não pedir decisões de API para o PO nem decisões de regra de negócio para os Devs.

@@ -1,91 +1,98 @@
----
-atom: format-card-m2
-version: 1.0
-reusable_in: [molecule-refine-feature]
-description: >
-  Monta o card M2 (card refinado, pós-refinamento com o time) a partir
-  das decisões tomadas na conversa. Este é o documento que o dev usa
-  para implementar — deve ter detalhe suficiente para que ninguém precise
-  voltar a perguntar o que já foi decidido.
----
-
-# Atom: format-card-m2
+# format-card-m2 (Card Refinado INVEST — Bill Wake)
 
 ## Input esperado
-- Card M1 existente no chat
-- Decisões tomadas na conversa de refinamento:
-  - Ambiguidades resolvidas (quem decidiu, o quê)
-  - CAs co-escritos (com mensagens e visual)
-  - Validações e mensagens de erro
-  - Fluxo visual (desktop/mobile/estados)
-  - Contrato de API (endpoints, payloads, responses)
-  - Ajustes no Figma sinalizados
-  - Intensidade acordada
+- Card M1 existente
+- Decisões tomadas na conversa de refinamento com o time completo:
+  - [V] Métricas de observabilidade e eventos de telemetria refinados
+  - [I] Alinhamento de dependências e estratégia de release
+  - [N] Ambiguidades resolvidas com dono e decisões de UX/UI (desktop, mobile, 4 estados)
+  - [E] Contrato de dados/API (schemas Zod, endpoints/handlers MSW), regras firmes atualizadas e riscos
+  - [S] Intensidade acordada por todos (escopo do esqueleto confirmado)
+  - [T] Critérios de Aceitação BDD co-escritos com mensagem exata e visual
 
 ## Output gerado
 
-```
-══════════════════════════════════════════════
-[HEADLINE] — REFINADO em [data]
+```markdown
+══════════════════════════════════════════════════════════════════════════
+[HEADLINE] — REFINADO em [Data]
 Participantes: [PO · UX/UI · Frontend · Backend]
-══════════════════════════════════════════════
+Status: Pronto para Planning · Todas as ambiguidades resolvidas
+══════════════════════════════════════════════════════════════════════════
 
-REGRAS FIRMES (atualizadas)
-[originais do M1]
-[+ decisões do refinamento marcadas — NOVO]
+[V] VALIOSO (Valuable & Observability)
+--------------------------------------------------------------------------
+• Valor de Negócio: [Confirmação do impacto esperado]
+• Observabilidade & Eventos de Telemetria:
+  - [Métrica HEART / Sinal]: [Comportamento esperado pós-lançamento]
+  - Evento de produto 1: `event: "[nome_do_evento]"` (disparado ao [ação])
+  - Evento de produto 2: `event: "[nome_do_evento]"` (disparado ao [ação])
 
-RESOLVIDO NO REFINAMENTO
-A[N] "[descrição original]" → [decisão tomada · quem decidiu]
+[I] INDEPENDENTE (Independent & Release Strategy)
+--------------------------------------------------------------------------
+• Dependências Mapeadas: [Status das dependências e mitigações acordadas]
+• Estratégia de Deploy: [Deploy independente, feature flag ou preview isolado]
 
-CRITÉRIOS DE ACEITAÇÃO (co-escritos)
-CA[N]
+[N] NEGOCIÁVEL — RESOLVIDO NO REFINAMENTO (Negotiable Closed)
+--------------------------------------------------------------------------
+• Ambiguidades Resolvidas:
+  A1 "[Descrição original]" → [Decisão tomada · Quem decidiu · Por quê]
+  A2 "[Descrição original]" → [Decisão tomada · Quem decidiu · Por quê]
+
+• Decisões de Experiência & Design System:
+  - Layout Desktop: [Estrutura dos blocos e hierarquia]
+  - Layout Mobile: [Comportamento responsivo / gavetas / navegação]
+  - Mapeamento dos 4 Estados:
+    · Loading: [Skeleton loader / spinner]
+    · Erro: [Feedback visual em linha / banner de retry]
+    · Vazio: [Placeholder com mensagem orientadora]
+    · Sucesso / Default: [Aparência estável]
+  - Acessibilidade & Contraste: [Diretrizes WCAG AA / tokens Dark e Light]
+• Figma:
+  → [Link atualizado] — Ajustes que UX/UI atualizará antes do sprint
+
+[E] ESTIMÁVEL — ESPECIFICAÇÃO TÉCNICA (Estimable Specifications)
+--------------------------------------------------------------------------
+• Regras Firmes Consolidadas:
+  [Regras originais do M1 mantidas]
+  + NOVO (Refinamento): [Novas regras acordadas pelo time]
+
+• Contratos de Dados & API:
+  - Schemas / Contratos (Zod / TypeScript):
+    `[Definição tipada dos payloads e contratos]`
+  - Endpoints / Handlers (MSW / REST):
+    `[Método, rota, status codes e payloads esperados]`
+
+• Decisões Arquiteturais & Riscos:
+  - Decisões: [Estratégia de cache, parser, persistência]
+  - Riscos Sinalizados: [Risco técnico mapeado com mitigação acordada]
+
+[S] SMALL / PEQUENO — INTENSIDADE ACORDADA (Small Agreement)
+--------------------------------------------------------------------------
+• Escopo Desta Iteração (Esqueleto / Fatia Mínima):
+  [Lista exata do que entra nesta entrega — validado por devs e PO]
+• Fora Desta Iteração (Próximas Intensificações):
+  [Lista do que fica explicitamente para os próximos ciclos]
+
+[T] TESTÁVEL — CRITÉRIOS DE ACEITAÇÃO (Testable CAs)
+--------------------------------------------------------------------------
+CA1 — [Título do Cenário]
+Dado [contexto inicial],
+quando [ação do usuário ou sistema],
+então [resultado observável]
+→ Mensagem: "[texto exato exibido na tela]"
+→ Visual: [estado visual do componente, cores e posicionamento]
+→ Telemetria: `event: "[nome_do_evento]"` (se aplicável)
+
+CA2 — [Título do Cenário]
 Dado [contexto],
 quando [ação],
 então [resultado]
 → Mensagem: "[texto exato]"
-→ Visual: [comportamento na tela · estado do componente]
-
-VALIDAÇÕES E MENSAGENS DE ERRO
-- [campo ou ação]: [regra] → mensagem: "[texto]" → visual: [onde · como]
-
-FLUXO VISUAL
-- Desktop: [comportamento]
-- Mobile: [comportamento]
-- Estados: [loading · erro · sucesso · vazio]
-
-FIGMA
-→ [link] — ajustes pós-refinamento:
-  - [item] (UX/UI atualiza antes do sprint)
-
-NOTAS TÉCNICAS
-- Contrato de API:
-  [MÉTODO] [endpoint]
-  body: {[campos]}
-  [status]: {[response]}
-- Riscos: [o que os devs sinalizaram]
-- Decisões: [arquiteturais que afetam comportamento]
-
-INTENSIDADE ACORDADA
-- Implementar nesta iteração: [o que entra]
-- Fora desta iteração: [o que fica — próxima intensificação]
-══════════════════════════════════════════════
+→ Visual: [comportamento na tela]
+══════════════════════════════════════════════════════════════════════════
 ```
 
 ## Regras de aplicação
-
-- Este card substitui o M1 na descrição do Work Item no Azure DevOps
-- "RESOLVIDO NO REFINAMENTO" deve cobrir todas as ambiguidades do M1 —
-  se alguma ficou aberta, mover para seção "AINDA EM ABERTO" com prazo
-- Cada CA deve ter mensagem exata e visual — CAs sem esses campos
-  não estão prontos para implementação
-- Contrato de API é obrigatório para qualquer feature que envolva
-  comunicação front-back — se ausente, sinalizar como lacuna
-- Ao finalizar, sempre adicionar:
-
-```
----
-O que colar no Azure DevOps:
-· Descrição → este card completo (substitui o M1)
-· Acceptance Criteria → seção CAs acima
-· Discussão → seção "RESOLVIDO NO REFINAMENTO"
-```
+- Substitui a Descrição do Work Item no Azure DevOps (coluna `Refinement`).
+- O bloco [T] deve ser copiado integralmente no campo `Acceptance Criteria` do Azure DevOps.
+- Cada CA deve ter obrigatoriamente **Mensagem Exata** e **Comportamento Visual**.

@@ -1,154 +1,45 @@
-# po-idea
+# po-idea (Personal Branding Edition)
 
 ## Quando acionar
+- PO apresenta ideia bruta, demanda ou problema de produto.
+- Ausência de card estruturado no histórico do chat.
+- Fase detectada: PHASE_CREATE.
 
-- PO apresenta ideia bruta, vaga ou incompleta
-- PO pede ajuda para estruturar uma demanda do cliente
-- A mensagem inicial não contém: quem é afetado, qual a dor,
-  qual o valor, o que já está decidido, como saber quando está pronto
+## Sequência de extração (Uma pergunta por vez)
 
-## Quando NÃO acionar (pular para format-card-m1)
+### Dimensão 1 — Valor & Dor
+**Objetivo:** Entender quem sofre a dor (Carlos, Mariana ou Matheus), qual o problema e a consequência real se não resolver.
+* Pergunta: *"Me conta mais sobre o problema. Quem está sendo prejudicado hoje e o que acontece de ruim por causa disso?"*
+* *Critério de suficiência:* Persona identificada + dor concreta + consequência nomeada.
 
-- PO apresenta documento de requisito estruturado com as 5 dimensões
-- PO cola um briefing detalhado com contexto suficiente
-- Neste caso: extrair as dimensões do documento e só perguntar
-  o que estiver ausente
+### Dimensão 2 — Negócio & Regras Firmes
+**Objetivo:** Separar o que é inegociável do que ainda pode ser moldado.
+* Pergunta: *"O que você já sabe com certeza absoluta que tem que acontecer — alguma regra ou restrição inegociável da marca ou do produto?"*
+* *Critério de suficiência:* Pelo menos uma regra mandatória isolada de suposições.
 
-## Sequência de extração
+### Dimensão 3 — Esqueleto vs. Intensificação
+**Objetivo:** Identificar a menor entrega vertical que já resolve a dor (MVP).
+* Pergunta: *"Se pudéssemos colocar no ar apenas uma fatia mínima esta semana para validar o valor com o usuário, qual seria? O que deixamos para as próximas intensificações?"*
+* *Critério de suficiência:* Descrição clara do esqueleto separada das ideias futuras.
 
-### Dimensão 1 — Valor
+### Dimensão 4 — Observabilidade & Sinais de Sucesso
+**Objetivo:** Garantir que a feature possa ser medida no mundo real para confirmar se resolveu a dor.
+* Pergunta: *"Após a publicação, como saberemos que as dores foram realmente resolvidas? Que sinais ou métricas observáveis (ex: visitas, conversão em cliques no CV/contato, tempo de leitura) nos dirão que funcionou?"*
+* *Critério de suficiência:* Pelo menos um sinal de engajamento/adoção e um evento de conversão/sucesso.
 
-**Objetivo:** entender a dor real, para quem, e o impacto se não resolver.
+### Dimensão 5 — Dependências
+**Objetivo:** Identificar bloqueios externos ou precedências.
+* Pergunta: *"Essa funcionalidade depende de algo que ainda não existe (design no Figma, infra, domínio), ou pode ser desenvolvida de forma independente?"*
+* *Critério de suficiência:* Dependências tipadas (bloqueio total ou contornável).
 
-Pergunta inicial:
-
-> "Me conta mais sobre o problema. Quem está sendo prejudicado hoje
-> e o que acontece de ruim por causa disso?"
-
-Se a resposta for superficial (ex: "o cliente quer melhorar X"):
-
-> "E se não resolvermos isso, qual o impacto concreto —
-> perde cliente, gera retrabalho, cria risco operacional?"
-
-Se mencionar múltiplos afetados:
-
-> "Desses todos, quem sente a dor mais diretamente no dia a dia?"
-
-**Critério de suficiência:** tem o perfil do afetado + a dor específica
-
-- pelo menos uma consequência de não resolver.
-
----
-
-### Dimensão 2 — Negócio
-
-**Objetivo:** separar o que já está decidido do que ainda pode mudar.
-
-Pergunta inicial:
-
-> "O que você já sabe que precisa acontecer — alguma restrição ou
-> regra que não tem discussão?"
-
-Se misturar firme com aberto:
-
-> "Isso que você disse — é uma regra do cliente que não muda,
-> ou é uma sugestão de como resolver que ainda pode mudar no refinamento?"
-
-Se tudo parecer aberto:
-
-> "Existe algo que o cliente disse explicitamente que é obrigatório?"
-
-**Critério de suficiência:** tem pelo menos uma regra firme separada
-do que está em aberto.
-
----
-
-### Dimensão 3 — Esqueleto
-
-**Objetivo:** identificar a menor entrega com valor real.
-
-Pergunta inicial:
-
-> "Se você pudesse entregar só uma parte disso primeiro para validar
-> com o cliente, qual seria? O que é o mínimo que já resolveria a dor?"
-
-Se o PO listar tudo de uma vez:
-
-> "De tudo isso, o que o cliente sentiria falta primeiro se não tivesse?
-> Isso provavelmente é o que entregamos primeiro."
-
-Se a resposta for "tudo ao mesmo tempo":
-
-> "Imagina que você tem 1 semana. O que entregaria nessa semana que
-> já teria valor para o cliente, mesmo que incompleto?"
-
-**Critério de suficiência:** tem uma descrição do esqueleto separada
-das intensificações.
-
----
-
-### Dimensão 4 — Dependências
-
-**Objetivo:** identificar o que bloqueia ou precisa existir antes.
-
-Pergunta inicial:
-
-> "Isso depende de alguma outra coisa que ainda não existe no sistema,
-> ou pode ser construído de forma independente?"
-
-Se depender de outra feature:
-
-> "Essa dependência é total (não dá pra começar sem) ou tem um contorno
-> possível, como mockar dados ou construir em paralelo?"
-
-**Critério de suficiência:** dependências identificadas e tipadas
-(total ou contornável).
-
----
-
-### Dimensão 5 — Testabilidade
-
-**Objetivo:** garantir que o time saberá quando está pronto.
-
-Pergunta inicial:
-
-> "Como você saberia que isso foi entregue corretamente? O que o cliente
-> ou usuário conseguiria fazer que não conseguia antes?"
-
-Se a resposta for vaga ("ficaria melhor", "mais fácil"):
-
-> "Consegue descrever um cenário concreto? Tipo: 'quando o organizador
-> faz X, ele consegue Y sem precisar de Z' — assim o time sabe
-> exatamente o que testar."
-
-Se o PO não souber:
-
-> "Tudo bem não saber agora — vamos pelo menos tentar descrever
-> o antes e o depois. Como é hoje? Como deveria ser?"
-
-**Critério de suficiência:** tem pelo menos dois cenários concretos
-no formato Quando/Então.
+### Dimensão 6 — Testabilidade
+**Objetivo:** Garantir que o time saberá quando está pronto através de cenários verificáveis.
+* Pergunta: *"Como o usuário experimenta isso na prática? Consegue me descrever 2 cenários concretos no formato: 'Quando o visitante faz X, ele vê Y'?"*
+* *Critério de suficiência:* Mínimo de 2 cenários de teste claros.
 
 ---
 
 ## Encerramento da entrevista
-
-Encerrar quando as 5 dimensões tiverem critério de suficiência atingido.
-Antes de gerar o card, sinalizar:
-
-> "Acho que tenho o suficiente para montar o card inicial. Vou gerar
-> agora — revise e me diz se capturei certo."
-
-## Output estruturado (para format-card-m1)
-
-```
-EXTRAÇÃO — po-idea
-Dimensão 1 (Valor): [afetado · dor · consequência]
-Dimensão 2 (Negócio): [firmes: ... / em aberto: ...]
-Dimensão 3 (Esqueleto): [mínimo: ... / intensificações: ...]
-Dimensão 4 (Dependências): [dependência · tipo · contorno]
-Dimensão 5 (Testável): [cenário 1 · cenário 2]
-```
-
-Este output é passado internamente para `format-card-m1`.
-Não é exibido ao PO — o PO vê o card M1 diretamente.
+Atingidos os critérios das dimensões, emitir:
+> *"Tenho as informações necessárias para estruturar o card inicial. Vou formatar agora — revise se capturei fielmente sua visão."*
+E acionar internamente `check-invest` e `format-card-m1`.
