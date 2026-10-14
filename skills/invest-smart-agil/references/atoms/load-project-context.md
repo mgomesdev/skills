@@ -1,103 +1,44 @@
-# load-project-context
+# load-project-context (Universal Codebase Inspector)
 
 ## Quando acionar
-
-- Flag `--with-docs` está ativa no chat
-- Papel atual ∈ {Frontend, Backend}
-- Workflow em curso é `refine-feature` (antes de cada pendência técnica)
-  ou `plan-dev` (antes de gerar as tasks)
+- Flag `--with-docs` está ativa no chat.
+- Papel atual é de Engenharia (Frontend, Backend, Mobile, Fullstack).
+- Fase em curso é Refinamento (antes de responder cada pendência técnica) ou Planning (antes de gerar as tasks).
 
 ## Quando NÃO acionar
+- Flag ausente ou `--no-docs` em vigor.
+- Papel é PO ou UX/UI.
+- Pendência é puramente de negócio/estratégia sem implicação técnica.
 
-- Flag ausente ou `--no-docs` em vigor
-- Papel é PO ou UX/UI
-- Pendência é puramente de negócio (sem implicação técnica visível)
-- Pedido fora de feature (já barrado por `scope-guard`)
+## Estratégia de inspeção agnóstica de repositório
 
-## Input esperado
+1. **Descoberta do Padrão do Repositório:**
+   - Detectar a estrutura do projeto ativo (monorepo com `apps/` e `packages/`, repositório único, backend isolado, etc.).
+   - Localizar os arquivos canônicos de definição de dados e contratos (ex: schemas, interfaces, DTOs, modelos ORM).
+   - Localizar a biblioteca de componentes e design system do projeto (se frontend).
+2. **Busca Cirúrgica e Pontual:**
+   - Extrair palavras-chave da headline e da pendência técnica (domínio + verbo + entidade).
+   - Fazer busca rápida dirigida por termos-chave nos módulos correspondentes.
+   - Limite estrito: no máximo 2 tentativas de busca por pendência para economizar tokens e tempo.
+3. **Citação Verificável:**
+   - Sempre citar `arquivo:linha` ao afirmar que algo "já existe" no código.
 
-- Headline da feature + domínio identificado
-- Papel atual (Frontend ou Backend)
-- Contexto pontual:
-  - Em `refine-feature`: a pendência aberta sob discussão (A[N])
-  - Em `plan-dev`: o card M2 completo + CAs
+## Output entregue ao Dev no chat
 
-## Áreas do repositório por papel
-
-**Backend:**
-
-- `apps/api/src/modules/**` — módulos NestJS existentes
-- `apps/api/prisma/schema.prisma` — modelo de dados atual
-- `specs/features/**/prd.md` e `research.md` — decisões prévias
-- `docs/structure.md`, `docs/code-style.md`, `docs/testing.md` — convenções
-
-**Frontend:**
-
-- `apps/{organizer,backoffice,participant}/src/**` — telas e fluxos
-- `packages/ui/**` — componentes reutilizáveis
-- `specs/features/ui/**` — decisões de UI prévias
-- `docs/structure.md`, `docs/code-style.md` — convenções
-
-## Estratégia de busca
-
-1. Extrair termos-chave da headline e da pendência (domínio + verbo + entidade).
-2. Glob nas áreas do papel para localizar arquivos do domínio.
-3. Grep dirigido pelos termos-chave nos arquivos encontrados.
-4. Ler apenas o necessário para responder a pendência — sem varredura
-   exaustiva. Se nada relevante aparecer em duas tentativas, parar.
-5. **Não ler arquivos `.pen`** — usar tools MCP `pencil` se design for
-   relevante.
-
-## Output entregue ao dev no chat
-
-Antes da pergunta original do loop (refinamento) ou antes da task (planning),
-apresentar:
+Antes da pergunta da pendência (no Refinamento) ou da geração da task (no Planning):
 
 ```
 📎 Contexto do projeto para [pendência | escopo da task]:
 
-· Já existe: [achado em linguagem direta] — `caminho/arquivo.ts:linha`
-· Convenção aplicável: [regra] — `docs/...`
-· Lacuna real: [o que NÃO existe e precisa decidir agora]
-· Sugestão para revisar: [proposta concreta marcada como sugestão]
+· Já existe: [achado em linguagem direta] — `caminho/arquivo.ext:linha`
+· Convenção aplicável: [padrão detectado no repo] — `docs/...` ou `exemplo:linha`
+· Lacuna real: [o que NÃO existe no código e precisa ser decidido agora]
+· Sugestão para revisar: [proposta técnica concreta marcada como sugestão]
 
 Faz sentido seguir por aqui ou prefere outro caminho?
 ```
 
-Em `plan-dev`, o output integra cada task SMART:
-
-- Descrição da task cita `arquivo:linha` quando reusa código existente.
-- Fechar a cobertura com linha extra:
-
-```
-REUSO IDENTIFICADO:
-· [recurso reusado] — `caminho:linha`
-· [recurso reusado] — `caminho:linha`
-```
-
 ## Regras críticas
-
-- **Nunca decidir pelo dev.** O atom traz fatos e marca propostas como
-  sugestão. O dev valida ou rejeita.
-- **Sempre citar `arquivo:linha`.** Sem citação verificável, não afirmar
-  que algo "já existe".
-- **Quando não achar nada relevante, dizer isso.** Frase padrão:
-  *"Não achei contexto relevante para essa pendência no projeto —
-  decida pelo card e pela conversa do time."* Nunca inventar achado.
-- **Não duplicar a varredura.** Se a mesma área já foi consultada no
-  mesmo turno, reusar o resultado.
-- **Não escrever no projeto.** Este atom é read-only.
-
-## Saída interna (para o molecule chamador)
-
-```
-CONTEXTO — load-project-context
-Pendência/Escopo: [texto]
-Achados:
-  · [achado] — arquivo:linha
-  · [achado] — arquivo:linha
-Convenções:
-  · [regra] — docs/...
-Lacuna: [o que falta decidir]
-Sugestão: [proposta]
-```
+- **Nunca decidir pelo desenvolvedor.** O agente traz fatos e evidências do código, mas o dev tem a palavra final.
+- **Se não encontrar nada relevante, declarar com transparência:** *"Não localizei referências prévias no código para esta pendência — vamos decidir pelo card e pelo diálogo com o time."*
+- **Read-only estrito:** Este atom apenas inspeciona, nunca altera arquivos no repositório.

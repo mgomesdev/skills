@@ -1,25 +1,28 @@
-# check-invest (Validação Silenciosa)
+# check-invest (Validação Universal INVEST)
 
 ## Input esperado
 - Card M1 ou M2 completo
-- Contexto do chat
+- Contexto da feature e do chat
 
 ## Output gerado
-Resultado **silencioso** se tudo estiver em conformidade. Só gera mensagem se detectar problema.
+Resultado **silencioso** se a história estiver em conformidade. Só gera mensagem se detectar problema.
 
-### Critérios Silenciosos de Qualidade (INVEST + O)
+### Critérios Silenciosos de Qualidade (INVEST + O de Bill Wake)
 
-| Critério | O que verificar | Severidade |
+| Critério | O que verificar | Severidade se falhar |
 | :--- | :--- | :--- |
-| **Independente** | Pode ser desenvolvida sem travar outras features? Contorno viável? | ⚠️ Aviso |
-| **Negociável** | Prescreve o "quê" e não o "como"? Figma como referência e não spec rígida? | ⚠️ Aviso |
-| **Valioso** | Resolve a dor de uma persona real (Carlos, Mariana ou Matheus)? Entrega valor externo? | ⛔ Bloqueio se não houver valor externo |
-| **Estimável** | O time consegue entender o escopo sem depender de adivinhação? | ⚠️ Aviso |
-| **Small (Esqueleto)** | Menor entrega com valor real bem delimitada? Cabe em poucos dias? | ⚠️ Aviso |
-| **Testável** | Cenários claros sem termos vagos ("fácil", "bonito", "intuitivo")? | ⛔ Bloqueio se CA inviável |
-| **Observável** | Possui sinais de sucesso/métricas para saber se a dor foi resolvida pós-launch? | ⚠️ Aviso se faltar observabilidade |
+| **[I] Independente** | Pode ser desenvolvida e entregue sem acoplamento rígido a outras histórias? Dependências têm contorno definido? | ⚠️ Aviso |
+| **[N] Negociável** | O card prescreve o "quê" e não o "como"? Figma é tratado como referência viva e não contrato engessado? | ⚠️ Aviso |
+| **[V] Valioso** | Resolve a dor de um usuário, cliente ou stakeholder real? Entrega fatia vertical com valor perceptível? | ⛔ Bloqueio se não houver valor externo |
+| **[E] Estimável** | O time técnico tem clareza suficiente de domínio e regras firmes para estimar sem adivinhação? | ⚠️ Aviso + sugerir Spike |
+| **[S] Small (Pequeno)** | É uma fatia mínima (esqueleto) que cabe em poucos dias? Escopos futuros estão claramente separados? | ⚠️ Aviso |
+| **[T] Testável** | Os cenários possuem comportamento esperado verificável? Isento de palavras subjetivas e vagas? | ⛔ Bloqueio se CA for inviável |
+| **[O] Observável** | Possui indicadores ou telemetria para medir se a dor foi resolvida no mundo real pós-lançamento? | ⚠️ Aviso se faltar observabilidade |
+
+### Palavras-gatilho que violam Testabilidade (Sinalizar e pedir reformulação)
+"rápido", "fácil", "intuitivo", "apropriado", "melhor", "correto", "agradável", "qualquer", "todas as combinações", "natural".
 
 ### Regras de aplicação
-- Executar em segundo plano sem narrar ("estou conferindo o INVEST...").
-- Bloqueio total apenas se faltar valor externo real ou se os testes forem puramente subjetivos.
-- Aviso amigável se faltar a seção de Observabilidade, sugerindo adicionar eventos/sinais.
+- Executar silenciosamente em segundo plano — não narrar o processo interno.
+- Bloqueio total emitido apenas para falta de valor real ou cenários de teste inviáveis.
+- Mensagens de aviso devem conter sempre: **Critério**, **Impacto potencial** e **Ação corretiva sugerida**.
