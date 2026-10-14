@@ -58,6 +58,14 @@ Card Inicial (M1)         Figma & Visual       Card Refinado (M2)      Tasks SMA
 
 ---
 
+## 🚩 Flags de Execução (`--with-docs`)
+
+* `--with-docs` — Ativa o atom `load-project-context`. Consome a **Knowledge Base (Wiki no Azure DevOps via MCP)** como **Fonte Única da Verdade (SSoT)** para identificar a stack tecnológica homologada, padrões arquiteturais e contratos, cruzando-os com o código real do repositório (`arquivo:linha`). Aplicável para papéis de Engenharia no Refinamento e no Planning.
+* `--no-docs` — Desativa a consulta externa no mesmo chat.
+* *Sem flag:* Comportamento padrão (sem consulta à base de conhecimento).
+
+---
+
 ## 📊 Observabilidade de Produto Integrada (Outcome vs. Output)
 
 Nenhuma feature é considerada completa sem a definição de **como mediremos se o valor foi alcançado no mundo real**.
@@ -77,3 +85,27 @@ Toda história define hipóteses de valor mensuráveis (baseadas em frameworks c
 * **Uma pergunta por vez:** Na condução de entrevistas, faz apenas uma pergunta por turno para manter o foco do usuário.
 * **Silencioso no Sucesso:** O validador INVEST roda em segundo plano e só interrompe se houver bloqueios graves (ex: história sem valor externo perceptível ou critérios inviáveis).
 * **Linguagem Natural:** Prioriza termos amigáveis de produto ("Card Inicial", "Card Refinado", "Tasks técnicas").
+
+---
+
+## 📂 Componentes Modulares
+
+* **Atoms (Regras e Validações):**
+  * `references/atoms/scope-guard.md`: Proteção contra pedidos fora do escopo de features.
+  * `references/atoms/check-invest.md`: Validação universal dos 6 critérios INVEST + Observabilidade.
+  * `references/atoms/detect-phase.md`: Identificação contextual da fase atual no chat.
+  * `references/atoms/gate-prereq.md`: Travas de pré-requisito entre fases.
+  * `references/atoms/load-project-context.md`: Leitura da Knowledge Base (Wiki via MCP) como SSoT e cruzamento com o código local.
+* **Refiners (Extração Guiada):**
+  * `references/refiners/po-idea.md`: Roteiro de entrevista agnóstica para extração das dimensões do card.
+  * `references/refiners/role-detect.md`: Identificação de papéis (PO, UX, Dev).
+* **Molecules (Workflows):**
+  * `references/molecules/create-feature.md`: Workflow da Fase 1 (Criação).
+  * `references/molecules/refine-feature.md`: Workflow da Fase 2 (Refinamento).
+  * `references/molecules/plan-dev.md`: Workflow da Fase 3 (Planning).
+* **Assets (Templates Universais):**
+  * `assets/format-card-m1.md`: Template canônico do Card Inicial (INVEST).
+  * `assets/format-card-m2.md`: Template canônico do Card Refinado (INVEST).
+  * `assets/format-card-po-ux.md`: Template do Pré-refinamento de Design (Fase 2A).
+  * `assets/format-ca.md`: Template de Critério de Aceitação (Dado/Quando/Então).
+  * `assets/task-smart.md`: Template de Tarefa Técnica (SMART).
